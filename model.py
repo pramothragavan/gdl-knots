@@ -251,3 +251,12 @@ def hurdle_losses(logits, value_raw, y, pos_weight, lam,
 
     total = bce + lam * reg
     return total, bce, reg
+
+
+def collect_nonzero_values(train_loader):
+    vals = []
+    for b in train_loader:
+        y = b.y.float().view(b.num_graphs, -1)
+        nz = y[y != 0].cpu().numpy().astype(int)
+        vals.extend(nz.tolist())
+    return vals
